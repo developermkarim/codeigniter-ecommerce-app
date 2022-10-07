@@ -33,12 +33,39 @@ $routes->set404Override();
  * --------------------------------------------------------------------
  */
 
+
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
+$routes->get('/', 'Home::home',['filter'=>'noauth']);
+$routes->get('login', 'Home::signin',['filter'=>'noauth']);
 
+$routes->get('logout', 'Home::logout',['filter'=>'noauth']);
+
+$routes->match(['get','post'],'signup','Home::signup',['filter'=>'noauth']);
+//  $routes->post('create-signup','Home::signup');
+$routes->get('dashboard','Home::dashboard',['filter'=>'auth']);
+
+
+
+/* Admin Route Here */
+$routes->get('/admin','AdminController::index');
+$routes->post('admin_signin','AdminController::signin');
+$routes->match(['get','post'],'/admin/dashboard','AdminController::dashboard');
+$routes->get('admin_logout','AdminController::logout');
+
+$routes->match(['get','post'],'/admin/category','AdminController::category');
+
+$routes->match(['get','post'],'/admin/product','ProductController::index');
+$routes->match(['get','post'],'/admin/inser_product','ProductController::product');
+
+$routes->match(['get','post'],'productlist/(:any)','Home::productList/$1');
+
+$routes->match(['get','post'],'showProductDetails/(:any)','Home::productDetails/$1');
+
+$routes->match(['get','post'],'/admin/productList','ProductController::allProductList');
+// $routes->get('admin/user','AdminController::logout');
 /*
- * --------------------------------------------------------------------
+ * -------------------- ------------------------------------------------
  * Additional Routing
  * --------------------------------------------------------------------
  *

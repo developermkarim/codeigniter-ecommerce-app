@@ -61,3 +61,13 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - [mbstring](http://php.net/manual/en/mbstring.installation.php)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php)
 - xml (enabled by default - don't turn it off)
+
+## Migration for Creating Table in database
+```bash
+- Run php spark make:migation className
+- Then in the created migration file , take up() method table with column
+- then down()  method write $this->forge->dropTable('admin');
+- then Run php spark migrate
+- and check the database whether the desired table is created or not
+- finally two tables must be created in the database named in .env file.
+```
