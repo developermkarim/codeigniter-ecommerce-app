@@ -38,32 +38,18 @@ class ProductController extends BaseController
         $model = new ProductModel();
       if($this->request->getMethod() == 'post'){
 
-        $validRules = [
-            'product_image'=>[
-                'label' =>'image file',
-                'rules'=>'uploaded[product_image]' . '|is_image[product_image]'. '|mime_in[product_image,image/jpg,image/png,image/jpeg]',
 
-            ],
-        ];
-        if(!$this->validate($validRules)){
-            $data['validation'] = $this->validator;
+        $file = $this->request->getFile('product_image');
+        if($file->isValid() && !$file->hasMoved()){
+            $newName = $file->getRandomName();
+            $file->move("uploads/",$newName);
         }
-        else{
-
-            $img = $this->request->getFile('product_image');
-            if(!$img->hasMoved()){
-                $filepath = WRITEPATH .'uploads/'. $img->store();
-                $uploaded_fileinfo = new File($filepath);
-                $file_name = esc($uploaded_fileinfo->getBasename());
-            }
-        }
-       
         $productData = [
             'fk_catid' =>$this->request->getVar('fk_catid'),
             'product_name' =>$this->request->getVar('product_name'),
             'MRP' =>$this->request->getVar('MRP'),
             'selling_price' =>$this->request->getVar('selling_price'),
-            'image' => $file_name,
+            'image' => $newName,
             'qty' =>$this->request->getVar('qty'),
             'product_desc' =>$this->request->getVar('product_desc'),
         ];
@@ -88,8 +74,18 @@ class ProductController extends BaseController
     {
         $data = [];
         $pdModel = new ProductModel();
+        
         $data['admin_content'] = 'admin/productList';
         $data['allProducts'] = $pdModel->findAll();
+        return view('admin/includes/template',$data);
+    }
+
+    public function allCategoryList()
+    {
+        $data = [];
+        $catModel = new CategoryModel();
+        $data['admin_content'] = 'admin/categoryList';
+        $data['allCategories'] = $catModel->findAll();
         return view('admin/includes/template',$data);
     }
 

@@ -7,14 +7,14 @@ use CodeIgniter\Model;
 class CartModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'carts';
+    protected $table            = 'cart';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['id','fk_product_id','qyt','cost','user_id','updated_at','created_at'];
 
     // Dates
     protected $useTimestamps = false;

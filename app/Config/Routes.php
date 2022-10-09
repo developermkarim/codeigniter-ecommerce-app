@@ -36,14 +36,20 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::home',['filter'=>'noauth']);
-$routes->get('login', 'Home::signin',['filter'=>'noauth']);
+$routes->get('/','Home::home');
+$routes->get('/signup', 'UserSignupController::index');
+$routes->match(['get', 'post'], 'SignupController/store', 'UserSignupController::store');
+$routes->match(['get', 'post'], 'SigninController/loginAuth', 'UserSigninController::loginAuth');
+$routes->get('/signin', 'UserSigninController::index');
+$routes->get('/signout', 'UserSigninController::signout');
+// $routes->get('/', 'Home::home',['filter'=>'noauth']);
+// $routes->get('login', 'Home::signin',['filter'=>'noauth']);
 
-$routes->get('logout', 'Home::logout',['filter'=>'noauth']);
+// $routes->get('logout', 'Home::logout',['filter'=>'noauth']);
 
-$routes->match(['get','post'],'signup','Home::signup',['filter'=>'noauth']);
-//  $routes->post('create-signup','Home::signup');
-$routes->get('dashboard','Home::dashboard',['filter'=>'auth']);
+// $routes->match(['get','post'],'signup','Home::signup',['filter'=>'noauth']);
+// //  $routes->post('create-signup','Home::signup');
+// $routes->get('dashboard','Home::dashboard',['filter'=>'auth']);
 
 
 
@@ -63,6 +69,10 @@ $routes->match(['get','post'],'productlist/(:any)','Home::productList/$1');
 $routes->match(['get','post'],'showProductDetails/(:any)','Home::productDetails/$1');
 
 $routes->match(['get','post'],'/admin/productList','ProductController::allProductList');
+$routes->match(['get','post'],'/admin/categoryList','ProductController::allCategoryList');
+
+/* add to card here  */
+$routes->post('addCart','Home::addToCart',['filter' => 'authGuard']);
 // $routes->get('admin/user','AdminController::logout');
 /*
  * -------------------- ------------------------------------------------

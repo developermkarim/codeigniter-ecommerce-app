@@ -34,7 +34,7 @@
 
             <div class="col-xl-3 col-md-6 col-12">
                 <div class="products_imgbox">
-                   <a href="<?= base_url() ;?>/showProductDetails/<?= $value['id'] ;?>"> <img src="images/product-24.jpg" class="products_img"></a>
+                   <a href="<?= base_url() ;?>/showProductDetails/<?= $value['id'] ;?>"> <img src="<?= base_url() ;?>/uploads/<?= $value['image'];?>" class="products_img"></a>
                     <h3><?= $value['product_name'];?></h3>
                     <h3><?= '   price '. $value['selling_price'];?> ৳ <del><?= $value['MRP'];?></span></h3>
                     <p><?= $value['product_desc'];?></p>

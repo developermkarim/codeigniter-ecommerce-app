@@ -1,3 +1,4 @@
+
 <?php $this->extend('includes/template.php'); ?>
 
 <?php $this->section('main-content'); ?>
@@ -17,14 +18,24 @@
                         </div>
 
                             <div class="details_btnsc">
-                                <a href="cart.html"><button class="details_btn">ADD TO CART</button></a>
+
+                            <div  id="input_div" class=" details_addtocart">
+                            <input type="button" id="plus" onclick="plus()" class="plus_input">
+                            <input type="text" size="20" id="count" class="details_inputtext" value="1" class="plus_input">
+                             <input type="button" id="minus" onclick="minus()" class="minus_input">
+                            </div>
+                               
+
+                                <span type="text" id='wait'></span>
+
+                                <a  id="addToCartBtn" href="javascript:void(0)"  onclick="addCart(<?= $productDetals['id'];?>,<?= $productDetals['selling_price'] ;?>,<?= session()->get('id');?>)" class="details_btn">ADD TO CART</a>
                             </div>
                     </div>
 </div>
 
                 <div class="col-xl-8 col-md-12 col-12">
                     <div class="details_textbox">
-                        <h3><?= $productDetals['product_name'];?></h3>
+                        <h3 id="title"><?= $productDetals['product_name'];?></h3>
                         <h4>BDT <?= $productDetals['selling_price'] ;?> <p><del>BDT <?= $productDetals['MRP'];?></del></p></h4>
                         <h6>Hurry, Only <?= $productDetals['qty'];?> left! </h6>
                         <h5>Available offers</h5>

@@ -14,7 +14,7 @@ class AdminModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id','name','email','phone','password','created_at','updated_at'];
+    protected $allowedFields    = ['id','name','email','phone','role','password'];
 
     // Dates
     protected $useTimestamps = false;

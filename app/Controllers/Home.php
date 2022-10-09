@@ -3,8 +3,10 @@
 namespace App\Controllers;
 
 use App\Models\AdminModel;
+use App\Models\CartModel;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class Home extends BaseController
 {
@@ -133,5 +135,93 @@ class Home extends BaseController
         return view('productDetails',$data);
         
        }
+
+       public function addToCart()
+       {
+       
+       $cartModel = new CartModel();
+        $jsonData =  [];
+        if($this->request->getMethod()=='post'){
+            $productId = $this->request->getVar('productId');
+            $userId = $this->request->getVar('userId');
+            $cartData = [
+               'fk_product_id'=> $this->request->getVar('productId'),
+               'qyt'=>1,
+               'cost'=>$this->request->getVar('pdCost'),
+               'user_id'=>$this->request->getVar('userId'),
+
+            ];
+          $productDetails = $cartModel->where('fk_product_id',$productId)->where('user_id',$userId)->findAll();
+         if((count($productDetails)) == 1){
+            // print_r($productDetails[0]['qyt']);
+            $oldtqty = $productDetails[0]['qyt'];
+            $id = $productDetails[0]['id'];
+            $updatedCart = [
+                'qyt' => $oldtqty + 1,
+            ];
+        
+
+            
+           if($cartModel->update($id,$updatedCart)) {
+            $jsonData = ['status'=>'success','qty'=>$oldtqty];
+           }
+           else{
+            $jsonData  = ['status'=>'error'];
+           }
+
+          }
+           else{
+           if($cartModel->save($cartData)){
+            $jsonData = ['status'=>'success','qty'=> 1];
+           }
+           else{
+            $jsonData = ['status'=>'error'];
+           }
+           
+           }
+
+           echo json_encode($jsonData);
+        //    print_r($jsonData);exit;
+        }
+
+        }
+       
+       
+        public function cartIncrement()
+        {
+            $incrementStatus = [];
+            $cartModel = new CartModel();
+            if($this->request->getMethod()=='post'){
+                $productId = $this->request->getVar('productId');
+                $userId = $this->request->getVar('userId');
+
+                $productDetails = $cartModel->where('fk_product_id',$productId)->where('user_id',$userId)->findAll();
+                $pdQty = $productDetails[0]['qyt'];
+                $id = $productDetails[0]['id'];
+                if(count($productDetails) ==1){
+
+                }
+                else{
+                    $updateQyt = [
+                        'qyt'=>$pdQty -1
+                    ];
+                    if($cartModel->update($id,$updateQyt)){
+                        $incrementStatus = array('status'=>'success','qyt'=>$pdQty-1);
+                    }
+                    else{
+                        echo 2;
+                    }
+
+                }
+               /*  $cartData = [
+                   'fk_product_id'=> $this->request->getVar('productId'),
+                   'user_id'=>$this->request->getVar('userId'),
+    
+                ]; */
+
+                echo json_encode($incrementStatus);
+            }
+        }
+
      
 }
