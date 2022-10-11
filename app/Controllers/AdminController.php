@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\AdminModel;
 // use App\Models\AdminModel;
-use App\Models\CartModel;
 use App\Models\CategoryModel;
 
  \Config\Services::validation();
@@ -21,7 +21,7 @@ class AdminController extends BaseController
     {
         helper(['form']);
         $session = session();
-        $userModel = new CartModel();
+        $userModel = new AdminModel();
         $email = $this->request->getVar('email');
         $password = $this->request->getVar('password');
         
@@ -64,9 +64,8 @@ class AdminController extends BaseController
 
     public function logout()
     {
-        /*  session_destroy();
-        session_unset(); */
-        // return view('admin/login');
+        session()->session_destroy();
+      
         redirect()->to(base_url('/admin'));
 
     }

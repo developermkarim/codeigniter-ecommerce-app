@@ -19,16 +19,18 @@
 
                             <div class="details_btnsc">
 
-                            <div  id="input_div" class=" details_addtocart">
-                            <input type="button" id="plus" onclick="plus()" class="plus_input">
-                            <input type="text" size="20" id="count" class="details_inputtext" value="1" class="plus_input">
-                             <input type="button" id="minus" onclick="minus()" class="minus_input">
+                            <div  id="input_div" class=" details_addtocart" style="display: none;">
+                            <input type="button" value="+" id="plus" onclick="addCart(<?= $productDetals['id'];?>,<?= $productDetals['selling_price'] ;?>,<?= session()->get('id');?>)" class="plus_input countInput">
+
+                            <input type="text" size="1" id="count" class="details_inputtext" value="" class="plus_input">
+
+                             <input type="button" value="-" id="minus" onclick="minus(<?= $productDetals['id'];?>,<?= session()->get('id');?>)" class="minus_input countInput">
                             </div>
                                
 
                                 <span type="text" id='wait'></span>
 
-                                <a  id="addToCartBtn" href="javascript:void(0)"  onclick="addCart(<?= $productDetals['id'];?>,<?= $productDetals['selling_price'] ;?>,<?= session()->get('id');?>)" class="details_btn">ADD TO CART</a>
+                                <button style="cursor:<?= !session()->get('id') ?'not-allowed':'pointer' ?>" <?= !session()->get('id') ? 'disabled':''?>  id="addToCartBtn"   onclick="addCart(<?= $productDetals['id'];?>,<?= $productDetals['selling_price'] ;?>,<?= session()->get('id');?>)" class="details_btn">ADD TO CART</button>
                             </div>
                     </div>
 </div>

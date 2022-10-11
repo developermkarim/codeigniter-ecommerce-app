@@ -73,7 +73,11 @@ $routes->match(['get','post'],'/admin/categoryList','ProductController::allCateg
 
 /* add to card here  */
 $routes->post('addCart','Home::addToCart',['filter' => 'authGuard']);
-// $routes->get('admin/user','AdminController::logout');
+$routes->post('increment','Home::cartIncrement');
+
+$routes->post('decrement','Home::cartdecrement');
+
+$routes->get('cartShow','Home::cart');
 /*
  * -------------------- ------------------------------------------------
  * Additional Routing

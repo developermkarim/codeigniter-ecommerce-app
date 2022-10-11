@@ -9,16 +9,16 @@ function addCart(productId,cost,userId){
     type:'POST',
     data:{productId:productId,pdCost:cost,userId:userId},
     beforeSend:()=>{
-$('#wait').text('plz,Waiting to add in cart')
     },
     completed:()=>{
-        $('#wait').text('')()
+        // $('#wait').text('')()
     },
     success:(response)=>{
      var res = JSON.parse(response);
      if(res.status == 'success'){
        var result = res.qty;
       $('#count').val(result);
+      $("#countValue").text(res.count)
       $('#addToCartBtn').hide();
       $('#input_div').show();
 
@@ -47,10 +47,24 @@ $.ajax({
   url:baseUrl + 'decrement',
   type:'POST',
   data:{productId:productId,userId:userId},
+  beforeSend:()=>{},
+  complete:()=>{},
   success:(resonse)=>{
+ var res = JSON.parse(resonse);
+ if(res.status == 'success'){
+  $('#count').val(res.qyt);
+  $('#addToCartBtn').hide();
+  $('#input_div').show();
 
-  }
+ }
+ else{
+  $('#addToCartBtn').show();
+  $('#input_div').hide();
+ }
+ }
+
 })
+
 }
 
 

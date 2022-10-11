@@ -1,5 +1,14 @@
 <?php
+
+use App\Models\CartModel;
+
 error_reporting(0);
+
+$cartModel = new CartModel();
+$data = session()->get();
+// print_r($data);
+ $totalCount = $cartModel->where('user_id',$data['id'])->countAll();
+// print_r($totalCout);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,35 +26,40 @@ error_reporting(0);
     <!--css link-->
     <link rel="stylesheet" href="<?php echo base_url(); ?>/css/style.css">
     <!--owl slider link-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
-   
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
 </head>
+
 <body>
     <!--bottom-header section start hare-->
     <header class="bottom_headersc">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light ">
-                <a class="navbar-brand" href="<?= base_url();?>"> <img src="<?= base_url() ;?>/images/logo-5.png" class="logo"> </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
+                <a class="navbar-brand" href="<?= base_url();?>"> <img src="<?= base_url() ;?>/images/logo-5.png"
+                        class="logo"> </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-              
+
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav m-auto">
-                    <?php
+                    <ul class="navbar-nav m-auto">
+                        <?php
                     if($cat_menu):
                      foreach ($cat_menu as $key => $value):?>
-                    <li class="nav-item">
-                      <a class="nav-link" href="<?= base_url() ;?>/productlist/<?= $value['id']?>">
-                      <?php echo $value['cat_name']; ?>
-                      </a>
-                    </li>
-                    <?php
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url() ;?>/productlist/<?= $value['id']?>">
+                                <?php echo $value['cat_name']; ?>
+                            </a>
+                        </li>
+                        <?php
                   
                   endforeach; 
                 endif;
                   ?>
-                    <!-- <li class="nav-item">
+                        <!-- <li class="nav-item">
                       <a class="nav-link" href="orderlist.html">Orderlist</a>
                     </li>
                     <li class="nav-item">
@@ -57,52 +71,64 @@ error_reporting(0);
                     <li class="nav-item">
                         <a class="nav-link" href="#">Toys & More</a>
                     </li> -->
-                  </ul>
-                  <div class="bottom_hiconbox">
-                    <a href="login.html"></a>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="bottom_hicon1" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                        
-                    </svg>
-                    <span class="badge badge-primary">1</span>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="bottom_hicon" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                               
-                            </svg>
-                            
-                        </a>
-                       
-                <div> <span class=""><?= session()->get('name')? session()->get('name'):"" ?></span></div>
+                    </ul>
+                    <div class="bottom_hiconbox ">
+                        <!-- <a href="login.html"></a> -->
+                        <a href="<?= base_url('cartShow') ;?>"><svg xmlns="http://www.w3.org/2000/svg" class="bottom_hicon1" width="16" height="16"
+                            fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                            <path
+                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
 
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <?php
+                        </svg></a> 
+                        <span id="countValue" class="badge badge-primary"><?= $totalCount;?></span>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="bottom_hicon" fill="currentColor"
+                                    class="bi bi-person" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+
+                                </svg>
+
+                            </a>
+
+
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                <span
+                                    class="dropdown-item"><?= session()->get('name')? strtok(session()->get('name')," ") :"" ?></span>
+
+                                <?php
                           if (!session()->get('name')){
                           
                           ?>
-                          <a class="dropdown-item"  href="<?php echo base_url('/signup') ?>">sign up</a>
+                                <a class="dropdown-item" href="<?php echo base_url('/signup') ?>">sign up</a>
 
-                          <?php
+                                <?php
                           }
                          else{
                           ?>
-                          <a class="dropdown-item"  href="<?php echo base_url('signout') ?>">logout</a>
-<?php
+                                <a class="dropdown-item" href="<?php echo base_url('signout') ?>">logout</a>
+                                <?php
                          }
                          if(!session()->get('name')):
 ?>
-                          <a class="dropdown-item" href="<?php echo base_url('signin') ?>">Login</a>
-                          <?php
+                                <a class="dropdown-item" href="<?php echo base_url('signin') ?>">Login</a>
+                                <?php
                           endif;
                           ?>
-                        </div>
-                    </li>
-                   
-                  </div>
-                  
+
+                            </div>
+
+                        </li>
+
+                    </div>
+
                 </div>
-              </nav>
+            </nav>
         </div>
     </header>
     <!--bottom-header section end hare-->

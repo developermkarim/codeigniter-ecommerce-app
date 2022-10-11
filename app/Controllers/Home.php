@@ -6,7 +6,6 @@ use App\Models\AdminModel;
 use App\Models\CartModel;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class Home extends BaseController
 {
@@ -81,36 +80,7 @@ class Home extends BaseController
     return view('login');
    }
 
-   /*  public function index()
-    {
-        $data = [];
-        $helper = ['form'];
-        if($this->request->getMethod() == 'post'){
-            $rules = [
-                'email'=>'required|min_length|max_length|valid_email',
-                'password'=>'required|min_length[8]|max_length[255]',
-            ];
-            $errors = [
-                'password'=>[
-                    'validateUser'=>'Email or Password does\'t match',
-                ]
-                ];
-
-                if(!$this->request->validate($rules,$errors)){
-
-                    $data['validation'] = $this->validator;
-                }
-
-                else{
-
-                    $model = new AdminModel();
-                    $admin = $model->where('email',$this->request->getVar('emailo'))->first();
-
-                  /*   if($this->varifyMypassword($this->request->getVar('password')), $admin['']); */
-                
-
-        
-       // return view('login');
+  
 
        public function productList($id)
        {
@@ -135,6 +105,16 @@ class Home extends BaseController
         return view('productDetails',$data);
         
        }
+       public function cartProduct($id)
+       {
+        $data = [];
+        $productModel = new ProductModel();
+        $categoryModel = new CategoryModel();
+       
+        $productModel->select('product.id, product.qty as pdQty, product.image,product.MRP, product.selling_price,cart.id as cartId,cart.qty as cartQty, cart.cost,');
+        $productModel->where('product.id', $id);
+        $productModel->join('cart','cart.fk_product_id = product.id','left');
+       }
 
        public function addToCart()
        {
@@ -152,6 +132,7 @@ class Home extends BaseController
 
             ];
           $productDetails = $cartModel->where('fk_product_id',$productId)->where('user_id',$userId)->findAll();
+          $allCount = $cartModel->where('user_id',$userId)->countAll();
          if((count($productDetails)) == 1){
             // print_r($productDetails[0]['qyt']);
             $oldtqty = $productDetails[0]['qyt'];
@@ -163,7 +144,7 @@ class Home extends BaseController
 
             
            if($cartModel->update($id,$updatedCart)) {
-            $jsonData = ['status'=>'success','qty'=>$oldtqty];
+            $jsonData = ['status'=>'success','qty'=>$oldtqty,'count'=>$allCount];
            }
            else{
             $jsonData  = ['status'=>'error'];
@@ -172,7 +153,7 @@ class Home extends BaseController
           }
            else{
            if($cartModel->save($cartData)){
-            $jsonData = ['status'=>'success','qty'=> 1];
+            $jsonData = ['status'=>'success','qty'=> 1,'count'=>$allCount + 1];
            }
            else{
             $jsonData = ['status'=>'error'];
@@ -187,7 +168,7 @@ class Home extends BaseController
         }
        
        
-        public function cartIncrement()
+        public function cartdecrement()
         {
             $incrementStatus = [];
             $cartModel = new CartModel();
@@ -198,12 +179,14 @@ class Home extends BaseController
                 $productDetails = $cartModel->where('fk_product_id',$productId)->where('user_id',$userId)->findAll();
                 $pdQty = $productDetails[0]['qyt'];
                 $id = $productDetails[0]['id'];
-                if(count($productDetails) ==1){
-
+                if($pdQty ==1){
+                    if($cartModel->where('id',$id)->delete()){
+                        $incrementStatus = array('status'=>'deleted'); 
+                    }
                 }
                 else{
                     $updateQyt = [
-                        'qyt'=>$pdQty -1
+                        'qyt'=>$pdQty - 1
                     ];
                     if($cartModel->update($id,$updateQyt)){
                         $incrementStatus = array('status'=>'success','qyt'=>$pdQty-1);
@@ -213,15 +196,57 @@ class Home extends BaseController
                     }
 
                 }
-               /*  $cartData = [
-                   'fk_product_id'=> $this->request->getVar('productId'),
-                   'user_id'=>$this->request->getVar('userId'),
-    
-                ]; */
+             
 
                 echo json_encode($incrementStatus);
             }
         }
 
+
+        public function cartincrement()
+        {
+            $incrementStatus = [];
+            $cartModel = new CartModel();
+            if($this->request->getMethod()=='post'){
+                $productId = $this->request->getVar('productId');
+                $userId = $this->request->getVar('userId');
+
+                $productDetails = $cartModel->where('fk_product_id',$productId)->where('user_id',$userId)->findAll();
+                $pdQty = $productDetails[0]['qyt'];
+                $id = $productDetails[0]['id'];
+                if($pdQty ==1){
+                    if($cartModel->where('id',$id)->delete()){
+                        $incrementStatus = array('status'=>'deleted'); 
+                    }
+                }
+                else{
+                    $updateQyt = [
+                        'qyt'=>$pdQty + 1
+                    ];
+                    if($cartModel->update($id,$updateQyt)){
+                        $incrementStatus = array('status'=>'success','qyt'=>$pdQty-1);
+                    }
+                    else{
+                        echo 2;
+                    }
+
+                }
+             
+
+                echo json_encode($incrementStatus);
+            }
+        }
+
+        public function cart()
+        {
+            $data = [];
+
+            $cartModel = new CartModel();
+            $productModel = new ProductModel();
+            $productModel->select('');
+            $productModel->join('cart','cart.fk_user_id = ');
+            $productModel->where();
+           return view('cart',$data);
+        }
      
 }
