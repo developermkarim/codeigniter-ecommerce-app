@@ -4,19 +4,18 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class OrderItemModel extends Model
+class ShippingModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'order_items';
+    protected $table            = 'shipping';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
-    protected $protectFields    = true; 
-    protected $allowedFields    = ['id','items_name','items_amount','items_qty',',fkorder_id','order_date','created_at','updated_at'];
+    protected $protectFields    = true;
+    protected $allowedFields    = ['id','firstname','lastname','city','area','pincode','message','fkuser_id','created_at','updated_at'];
 
-    // 	id	items_name	items_amount	items_qty	fkorder_id	order_date	created_at	updated_at
     // Dates
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';

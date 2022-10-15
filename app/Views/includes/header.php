@@ -5,10 +5,11 @@ use App\Models\CartModel;
 error_reporting(0);
 
 $cartModel = new CartModel();
-$data = session()->get();
+// $data = session()->get();
 // print_r($data);
- $totalCount = $cartModel->where('user_id',$data['id'])->countAll();
-// print_r($totalCout);
+ $totalCount = $cartModel->where('user_id',session()->get('id'))->countAll();
+ print_r($totalCout);
+// echo $totalCount;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,13 +75,15 @@ $data = session()->get();
                     </ul>
                     <div class="bottom_hiconbox ">
                         <!-- <a href="login.html"></a> -->
-                        <a href="<?= base_url('cartShow') ;?>"><svg xmlns="http://www.w3.org/2000/svg" class="bottom_hicon1" width="16" height="16"
+                        <a href="<?php echo $totalCount > 0 ? base_url('cartShow'): 'javascript:void(0)' ;?>">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="bottom_hicon1" width="16" height="16"
                             fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
                             <path
                                 d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
 
                         </svg></a> 
-                        <span id="countValue" class="badge badge-primary"><?= $totalCount;?></span>
+
+                        <span id="countValue" class="badge badge-primary"><?= session()->get('id') == $totalCount['user_id'] ? $totalCount :'0';?></span>
 
                         <li class="nav-item dropdown">
                             <a class="nav-link " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"

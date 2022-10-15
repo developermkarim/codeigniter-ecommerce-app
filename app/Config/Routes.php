@@ -78,7 +78,16 @@ $routes->post('increment','Home::cartIncrement');
 $routes->post('decrement','Home::cartdecrement');
 
 $routes->get('cartShow','Home::cart');
+
+$routes->post('cartRemove', 'Home::deleteCart');
+
+/* Check out Routes Here */
+$routes->get('checkout', 'Home::checkOut');
+$routes->match(['get','post'],'shipping', 'Home::shippingAddress');
+$routes->match(['get','post'],'proceed',"Home::proceedToOrder");
+
 /*
+
  * -------------------- ------------------------------------------------
  * Additional Routing
  * --------------------------------------------------------------------
